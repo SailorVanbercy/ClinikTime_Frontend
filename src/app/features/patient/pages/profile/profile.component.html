@@ -1,0 +1,60 @@
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/home">🩺 ClinikTime</a>
+  </div>
+
+  <div class="nav-links">
+    <a routerLink="/home" class="nav-link">Accueil</a>
+    <button (click)="logout()" class="btn-logout">Déconnexion</button>
+  </div>
+</nav>
+
+<div class="profile-container">
+
+  <div class="header-section">
+    <h2>Mes Fiches Patients</h2>
+    <p>Gérez ici votre dossier et ceux de vos proches.</p>
+  </div>
+
+  @if (loading) {
+    <div>Chargement de vos fiches...</div>
+  }
+
+  @else {
+    @if (profiles.length === 0) {
+      <div class="empty-state">
+        <p>Vous n'avez pas encore créé de fiche patient.</p>
+        <button class="btn-add-main" (click)="addProfile()">Créer ma fiche maintenant</button>
+      </div>
+    }
+
+    @if (profiles.length > 0) {
+      <div class="cards-list">
+
+        @for (p of profiles; track $index) {
+          <div class="patient-card">
+
+            <div class="card-header">
+              {{ p.lienParente }}
+              @if (p.sexe) {
+                <span class="gender-badge">({{ p.sexe }})</span>
+              }
+            </div>
+
+            <div class="card-body">
+              <h3>{{ p.nom | uppercase }} {{ p.prenom }}</h3>
+              <p>📅 Né(e) le : {{ p.dateNaissance | date:'dd/MM/yyyy' }}</p>
+              <button class="btn-modify">[Modifier]</button>
+            </div>
+          </div>
+        }
+
+      </div>
+
+      <button class="btn-add-relative" (click)="addProfile()">
+        (+) Ajouter un proche
+      </button>
+    }
+  }
+
+</div>

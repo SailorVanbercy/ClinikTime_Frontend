@@ -1,0 +1,216 @@
+/* --- GLOBAL FONT FIX --- */
+/* Pour s'assurer que tout le composant utilise la bonne police */
+:host {
+  display: block;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: #f3f4f6; /* Fond gris clair global comme le Home */
+  min-height: 100vh;
+}
+
+/* --- NAVBAR STYLES (Identique Home) --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Sécurité */
+}
+
+.logo a {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e40af;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #3b82f6;
+}
+
+.btn-logout {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit; /* Utilise la même police */
+}
+
+.btn-logout:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* --- CONTENEUR GLOBAL --- */
+.profile-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* --- EN-TÊTE --- */
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header-section h2 {
+  color: #1e40af;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.header-section p {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+/* --- GRILLE DE CARTES --- */
+.cards-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+/* --- LA CARTE --- */
+.patient-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.patient-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- TÊTE DE CARTE --- */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-weight: 700;
+  color: #374151;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+.gender-badge {
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* --- CORPS DE CARTE --- */
+.card-body h3 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.card-body p {
+  color: #6b7280;
+  margin: 5px 0 20px 0;
+  font-size: 0.95rem;
+}
+
+/* --- BOUTON MODIFIER --- */
+.btn-modify {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #3b82f6;
+  background-color: transparent;
+  color: #3b82f6;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-modify:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+/* --- BOUTON AJOUTER UN PROCHE --- */
+.btn-add-relative {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+  transition: background-color 0.2s, transform 0.1s;
+  font-family: inherit;
+}
+
+.btn-add-relative:hover {
+  background-color: #2563eb;
+  transform: scale(1.02);
+}
+
+/* --- ETAT VIDE --- */
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.btn-add-main {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  font-family: inherit;
+}

@@ -1,0 +1,66 @@
+<div class="home-container">
+
+  <nav class="navbar">
+    <div class="logo">
+      <span>🩺 ClinikTime</span>
+    </div>
+
+    <div class="nav-links">
+      <a routerLink="/profile" class="nav-link">Mon Profil</a>
+
+      <button (click)="logout()" class="btn-logout">Déconnexion</button>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Prenez soin de votre santé</h1>
+      <p>Trouvez un rendez-vous rapide avec un praticien qualifié.</p>
+
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-bar">
+
+        <div class="input-group">
+          <i>🔍</i>
+          <input type="text" formControlName="term" placeholder="Médecin, spécialité (ex: Dentiste)">
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="input-group">
+          <i>📍</i>
+          <input type="text" formControlName="location" placeholder="Où ? (ex: Bruxelles)">
+        </div>
+
+        <button type="submit">Rechercher</button>
+      </form>
+
+    </div>
+  </section>
+
+  <section class="info-section">
+    <h2>Vos derniers rendez-vous</h2>
+
+    <div class="cards-grid">
+      <div class="card" *ngFor="let rdv of lastAppointments">
+        <div class="card-header">
+          <div class="avatar-circle">{{ rdv.doctor.charAt(4) }}</div>
+          <div>
+            <h3>{{ rdv.doctor }}</h3>
+            <span>{{ rdv.specialty }}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>📅 {{ rdv.date }} à {{ rdv.time }}</p>
+          <button class="btn-outline">Reprendre RDV</button>
+        </div>
+      </div>
+
+      <div class="card promo-card">
+        <h3>Besoin d'un check-up ?</h3>
+        <p>Découvrez nos médecins généralistes disponibles aujourd'hui.</p>
+        <button class="btn-link">Voir les disponibilités</button>
+      </div>
+    </div>
+  </section>
+
+</div>

@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+/* RESET TOTAL */
+* {
+  box-sizing: border-box;
+}
+
+/* VERROUILLAGE VIEWPORT */
+html {
+  width: 100vw;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  width: 100vw;          /* 🔥 clé */
+  overflow-x: clip;
+
+  overscroll-behavior-x: none; /* 🔥 Brave / Chromium */
+  touch-action: pan-y;         /* 🔥 empêche pan horizontal */
+}
+
+/* ANGULAR ROOT */
+app-root {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* ROUTER */
+router-outlet {
+  display: block;
+}
