@@ -1,0 +1,134 @@
+/* ===========================
+   CONTAINER GLOBAL
+=========================== */
+.medecin-container {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+
+/* ===========================
+   TITRES
+=========================== */
+.medecin-container h1 {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #1e40af;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: #64748b;
+  margin-bottom: 50px;
+}
+
+/* ===========================
+   GRID DES ACTIONS
+=========================== */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+/* ===========================
+   CARTE ACTION
+=========================== */
+.action-card {
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 28px;
+  min-height: 160px;
+
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f8fafc 100%
+  );
+
+  text-decoration: none;
+  color: inherit;
+
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* ===========================
+   BARRE D’ACCENT À GAUCHE
+=========================== */
+.action-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 6px;
+  height: 100%;
+
+  background: linear-gradient(
+    180deg,
+    #3b82f6,
+    #1e40af
+  );
+}
+
+/* ===========================
+   HOVER
+=========================== */
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 25px 45px rgba(0, 0, 0, 0.15);
+}
+
+/* ===========================
+   TITRE DE CARTE
+=========================== */
+.action-card h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+/* ===========================
+   DESCRIPTION
+=========================== */
+.action-card p {
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+  .medecin-container h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 35px;
+  }
+
+  .action-card {
+    padding: 22px;
+    min-height: 140px;
+  }
+}

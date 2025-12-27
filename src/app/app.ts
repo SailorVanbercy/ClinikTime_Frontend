@@ -18,9 +18,10 @@ export class App implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authService.checkAuth().subscribe({
-      next: () => {
+    this.authService.loadCurrentUser().subscribe({
+      next: user => {
         //utilisateur déjà connecté
+        console.log('USER CHARGÉ', user);
         this.router.navigate(['/home']);
       },
       error : () => {

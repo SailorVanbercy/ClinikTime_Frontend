@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
     private patientService: PatientService,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private authService: AuthService // 4. Injection du service d'auth
+    private authService: AuthService // 4. Injection du service d'medecin
   ) {}
 
   ngOnInit() {

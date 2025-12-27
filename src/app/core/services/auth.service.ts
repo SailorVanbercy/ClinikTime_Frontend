@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
 export interface LoginDto {
@@ -13,11 +13,12 @@ export interface RegisterDto {
   motDePasse: string;
 }
 
-export interface MeDto {
+export interface CurrentUser {
   id: number;
   email: string;
   role: string;
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,15 +26,23 @@ export interface MeDto {
 export class AuthService {
 
   private readonly api = environment.API_BASE_URL;
-
+  private currentUserSubject = new BehaviorSubject<CurrentUser | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
   constructor(private http: HttpClient) {}
 
 
-  checkAuth() : Observable<any>{
-    return this.http.get(`${this.api}/auth/me`,
-      {
-        withCredentials: true
-      });
+  loadCurrentUser(): Observable<CurrentUser>{
+    return this.http.get<CurrentUser>(`${this.api}/auth/me`,
+      {withCredentials: true}).pipe(
+        tap(user => this.currentUserSubject.next(user))
+    );
+  }
+
+  getCurrentUser():CurrentUser | null{
+    return this.currentUserSubject.value;
+  }
+  isMedecin() : boolean{
+    return this.currentUserSubject.value?.role ==="Medecin";
   }
 
   login(dto: LoginDto): Observable<void> {
@@ -52,8 +61,8 @@ export class AuthService {
     );
   }
 
-  me(): Observable<MeDto> {
-    return this.http.get<MeDto>(
+  me(): Observable<CurrentUser> {
+    return this.http.get<CurrentUser>(
       `${this.api}/auth/me`,
       { withCredentials: true }
     );

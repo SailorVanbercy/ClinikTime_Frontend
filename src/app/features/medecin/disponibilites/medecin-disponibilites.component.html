@@ -1,0 +1,87 @@
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <h1>📅 Mes disponibilités</h1>
+    <p class="subtitle">Gérez vos créneaux ouverts et bloqués</p>
+  </header>
+
+  <!-- FORMULAIRE -->
+  <form [formGroup]="form" (ngSubmit)="submit()" class="dispo-form">
+
+    <div class="mode-switch">
+      <button type="button"
+              (click)="setMode('OUVRIR')"
+              [class.active]="mode === 'OUVRIR'">
+        ➕ Ouvrir
+      </button>
+
+      <button type="button"
+              (click)="setMode('BLOQUER')"
+              [class.active]="mode === 'BLOQUER'">
+        🔒 Bloquer
+      </button>
+    </div>
+
+    <input type="datetime-local" formControlName="debut">
+    <input type="datetime-local" formControlName="fin">
+
+    <button type="submit" [disabled]="submitting">
+      {{ mode === 'OUVRIR' ? 'Ajouter disponibilité' : 'Bloquer créneau' }}
+    </button>
+
+  </form>
+
+  <!-- LISTE -->
+  <section class="content">
+
+    <ng-container *ngIf="disponibilites$ | async as dispos">
+
+      <div *ngIf="dispos.length === 0" class="empty-state">
+        😕 Aucune disponibilité
+      </div>
+
+      <div *ngIf="dispos.length > 0" class="dispo-list">
+
+        <div *ngFor="let d of dispos"
+             class="dispo-card"
+             [class.bloque]="d.estBloque">
+
+          <div class="dispo-info">
+            <strong>{{ d.debut | date:'dd/MM/yyyy' }}</strong>
+            <span>{{ d.debut | date:'HH:mm' }} → {{ d.fin | date:'HH:mm' }}</span>
+          </div>
+
+          <div class="dispo-actions">
+            <span class="status">
+              {{ d.estBloque ? '🔒 Bloquée' : '🟢 Ouverte' }}
+            </span>
+
+            <button class="btn-delete"
+                    (click)="demanderSuppression(d.id)">
+              🗑️
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </section>
+
+</div>
+
+<!-- MODALE CONFIRMATION -->
+<div class="modal-backdrop" *ngIf="showConfirm">
+  <div class="modal">
+    <h3>Supprimer la disponibilité</h3>
+    <p>Cette action est irréversible.</p>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="annulerSuppression()">Annuler</button>
+      <button class="btn-confirm" (click)="confirmerSuppression()">Supprimer</button>
+    </div>
+  </div>
+</div>

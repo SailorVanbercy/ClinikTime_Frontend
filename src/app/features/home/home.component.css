@@ -109,7 +109,7 @@
 }
 
 /* =========================
-   SEARCH BAR (FIX MAJEUR)
+   SEARCH BAR
 ========================= */
 .search-bar {
   background: white;
@@ -124,7 +124,7 @@
   max-width: 800px;
   margin: 0 auto;
 
-  flex-wrap: wrap;           /* 🔥 FIX SCROLL */
+  flex-wrap: wrap;
   box-sizing: border-box;
 
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
@@ -165,7 +165,7 @@
   color: white;
   border: none;
 
-  padding: 12px 20px;     /* 🔥 réduit */
+  padding: 12px 20px;
   border-radius: 40px;
   font-weight: 600;
   cursor: pointer;
@@ -175,37 +175,55 @@
 }
 
 /* =========================
-   INFO SECTION
+   INFO SECTION (FIX VISUEL MAJEUR)
 ========================= */
 .info-section {
   width: 100%;
   max-width: 1200px;
 
-  margin: 50px auto;
-  padding: 0 20px;
+  margin: 60px auto;
+  padding: 40px 30px;
 
+  background-color: #ffffff;
+  border-radius: 24px;
+
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
 }
 
 /* =========================
-   CARDS GRID
+   CARDS GRID (FORCÉ VISIBLE)
 ========================= */
 .cards-grid {
-  display: grid;
+  display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 
   width: 100%;
   max-width: 100%;
+  margin-top: 30px;
+
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
+/* =========================
+   CARD
+========================= */
 .card {
   background: white;
   border-radius: 16px;
   padding: 20px;
 
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -242,6 +260,9 @@
   color: #6b7280;
 }
 
+/* =========================
+   BUTTON
+========================= */
 .btn-outline {
   width: 100%;
   padding: 10px;
@@ -297,8 +318,213 @@ img {
   height: auto;
   display: block;
 }
+/* =========================
+   RDV FORM – AMÉLIORATION UX
+========================= */
+
+/* Champs du formulaire */
+.rdv-field input,
+.rdv-field select {
+  background-color: #f9fafb;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rdv-field input::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus clair et moderne */
+.rdv-field input:focus,
+.rdv-field select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  background-color: #ffffff;
+}
+
+/* Séparation visuelle entre sections */
+.rdv-field:not(:last-child) {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
 
 /* =========================
-   SAFETY NET (ANTI-SLIDE)
+   CRÉNEAUX
 ========================= */
+
+.creneaux-grid {
+  margin-top: 16px;
+}
+
+.creneau {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  color: #1f2937;
+
+  padding: 10px 0;
+  border-radius: 14px;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  transition: all 0.15s ease;
+}
+
+.creneau:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  transform: translateY(-1px);
+}
+
+/* Créneau sélectionné */
+.creneau.selected {
+  border-color: #2563eb;
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  color: #ffffff;
+  box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.7);
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.rdv-actions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.btn-cancel:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-primary {
+  min-width: 200px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 12px 24px -12px rgba(30, 64, 175, 0.8);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+}
+
+.btn-primary[disabled] {
+  background: #94a3b8;
+  box-shadow: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+  .rdv-panel {
+    padding: 18px 16px;
+    border-radius: 18px;
+  }
+
+  .rdv-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-primary,
+  .btn-cancel {
+    width: 100%;
+  }
+}
+/* =========================
+   RDV MODAL – STRUCTURE
+========================= */
+
+.rdv-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  z-index: 3000;
+}
+
+.rdv-panel {
+  background: #ffffff;
+  width: 100%;
+  max-width: 720px;
+
+  border-radius: 24px;
+  padding: 24px 24px;
+
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
+
+  animation: rdvFadeIn 0.18s ease-out;
+}
+
+@keyframes rdvFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   RDV HEADER
+========================= */
+
+.rdv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.rdv-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #0f172a;
+}
+
+.rdv-subtitle {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.rdv-close {
+  border: none;
+  background: #f1f5f9;
+  color: #0f172a;
+
+  border-radius: 12px;
+  padding: 10px 14px;
+
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.rdv-close:hover {
+  background: #e2e8f0;
+}
+
+/* =========================
+   RDV FORM CONTAINER
+========================= */
+
+.rdv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
