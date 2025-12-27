@@ -1,0 +1,74 @@
+<app-navbar></app-navbar>
+
+<div class="admin-bg">
+
+  <h2 style="text-align: center; color: #1e40af; padding-top: 20px;">
+    Dashboard Admin - Gestion des Accès
+  </h2>
+
+  <div class="search-section">
+    <div class="search-box">
+      <label>Rechercher un utilisateur :</label>
+      <div class="input-row">
+        <input type="text" [(ngModel)]="searchTerm" (keyup.enter)="search()" placeholder="Rechercher par email...">
+      </div>
+    </div>
+    <button class="btn-search" (click)="search()">Rechercher</button>
+  </div>
+
+  @if (message) { <div class="msg success">{{ message }}</div> }
+  @if (error) { <div class="msg error">{{ error }}</div> }
+
+  <div class="table-container">
+    <table class="users-table">
+      <thead>
+      <tr>
+        <th>Email (Trié A-Z)</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of paginatedUsers; track user.id) {
+          <tr>
+            <td>{{ user.email }}</td>
+            <td>
+              <span [class]="'badge ' + user.role.toLowerCase()">{{ user.role }}</span>
+            </td>
+            <td>
+              @if (user.role === 'User') {
+                <button class="btn-promote" (click)="promote(user)">Passer Médecin</button>
+              } @else {
+                <span style="opacity: 0.5; font-style: italic;">Déjà {{ user.role }}</span>
+              }
+            </td>
+          </tr>
+        }
+        @empty {
+          <tr><td colspan="3" style="text-align: center; padding: 20px; color: #666;">Aucun résultat</td></tr>
+        }
+      </tbody>
+    </table>
+
+    @if (allUsers.length > itemsPerPage) {
+      <div class="pagination-controls">
+        <button
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+          class="btn-page">
+          &laquo; Précédent
+        </button>
+
+        <span class="page-info">Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+          class="btn-page">
+          Suivant &raquo;
+        </button>
+      </div>
+    }
+
+  </div>
+</div>

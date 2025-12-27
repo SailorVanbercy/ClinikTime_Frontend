@@ -1,0 +1,240 @@
+/* =========================
+   GLOBAL & LAYOUT
+========================= */
+:host {
+  display: block;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f3f4f6; /* Le même gris clair que Home/Profile */
+  min-height: 100vh;
+}
+
+.admin-bg {
+  max-width: 1200px; /* On limite la largeur pour que ce soit lisible */
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e40af; /* Le bleu foncé de ton logo */
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* =========================
+   SEARCH SECTION
+========================= */
+.search-section {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+
+  display: flex;
+  align-items: flex-end; /* Aligne le bouton avec le champ */
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1; /* Prend toute la place disponible */
+  min-width: 250px;
+}
+
+.search-box label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.input-row input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 50px; /* Style arrondi comme sur le Home */
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #f9fafb;
+}
+
+.input-row input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: white;
+}
+
+.btn-search {
+  background-color: #1e40af; /* Bleu foncé */
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  height: 46px; /* Pour matcher la hauteur de l'input */
+}
+
+.btn-search:hover {
+  background-color: #1e3a8a;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   MESSAGES (ALERTS)
+========================= */
+.msg {
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.msg.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.msg.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* =========================
+   TABLEAU
+========================= */
+.table-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Important pour les coins arrondis du tableau */
+  border: 1px solid #f3f4f6;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.users-table th {
+  background-color: #f8fafc;
+  padding: 18px 25px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.users-table td {
+  padding: 20px 25px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.users-table tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table tr:hover {
+  background-color: #f8fafc; /* Léger gris au survol de la ligne */
+}
+
+/* =========================
+   BADGES (Role)
+========================= */
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  min-width: 80px;
+}
+
+.badge.user {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.badge.medecin {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge.admin {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================
+   BOUTON ACTION
+========================= */
+.btn-promote {
+  background-color: white;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-promote:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+  background-color: white;
+  border-top: 1px solid #f1f5f9;
+}
+
+.page-info {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.btn-page {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #4b5563;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.btn-page:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-page:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
