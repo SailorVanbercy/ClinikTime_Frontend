@@ -28,6 +28,14 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+
+  checkAuth() : Observable<any>{
+    return this.http.get(`${this.api}/auth/me`,
+      {
+        withCredentials: true
+      });
+  }
+
   login(dto: LoginDto): Observable<void> {
     return this.http.post<void>(
       `${this.api}/auth/login`,
