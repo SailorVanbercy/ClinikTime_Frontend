@@ -15,67 +15,9 @@
   overflow-x: clip;
 }
 
-/* =========================
-   NAVBAR
-========================= */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 15px 20px;
-  width: 100%;
-  max-width: 100%;
-
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  overflow-x: hidden;
-}
-
-.logo span {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #1e40af;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: #4b5563;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.nav-link:hover {
-  color: #3b82f6;
-}
-
-.btn-logout {
-  background-color: #fee2e2;
-  color: #ef4444;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-logout:hover {
-  background-color: #ef4444;
-  color: white;
-}
+/* ❌ J'AI SUPPRIMÉ TOUTE LA SECTION NAVBAR ICI
+   CAR ELLE EST DANS NAVBAR.COMPONENT.CSS
+*/
 
 /* =========================
    HERO SECTION
@@ -109,7 +51,7 @@
 }
 
 /* =========================
-   SEARCH BAR (FIX MAJEUR)
+   SEARCH BAR
 ========================= */
 .search-bar {
   background: white;
@@ -124,7 +66,7 @@
   max-width: 800px;
   margin: 0 auto;
 
-  flex-wrap: wrap;           /* 🔥 FIX SCROLL */
+  flex-wrap: wrap;
   box-sizing: border-box;
 
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
@@ -165,7 +107,7 @@
   color: white;
   border: none;
 
-  padding: 12px 20px;     /* 🔥 réduit */
+  padding: 12px 20px;
   border-radius: 40px;
   font-weight: 600;
   cursor: pointer;
@@ -297,8 +239,3 @@ img {
   height: auto;
   display: block;
 }
-
-/* =========================
-   SAFETY NET (ANTI-SLIDE)
-========================= */
-

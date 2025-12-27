@@ -2,10 +2,12 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { HomeComponent } from './features/home/home.component';
-
-// 1. IMPORTS DES NOUVEAUX COMPOSANTS
 import { ProfileComponent } from './features/patient/pages/profile/profile.component';
 import { CreateProfileComponent } from './features/patient/pages/create-profile/create-profile.component';
+
+// 1. NOUVEAUX IMPORTS POUR L'ADMIN
+import { DashboardComponent } from './features/admin/pages/dashboard/dashboard.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   // Auth
@@ -15,11 +17,18 @@ export const routes: Routes = [
   // App
   { path: 'home', component: HomeComponent },
 
-  // 2. NOUVELLES ROUTES PATIENT
-  { path: 'profile', component: ProfileComponent },             // La liste (Cartes bleues)
-  { path: 'create-profile', component: CreateProfileComponent }, // Le formulaire
+  // Patient
+  { path: 'profile', component: ProfileComponent },
+  { path: 'create-profile', component: CreateProfileComponent },
 
-  // Redirections
+  // 2. NOUVELLE ROUTE ADMIN SÉCURISÉE
+  {
+    path: 'admin/dashboard',
+    component: DashboardComponent,
+    canActivate: [adminGuard] // Le vigile qui vérifie si tu es Admin
+  },
+
+  // Redirections (Toujours à la fin)
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }
 ];
