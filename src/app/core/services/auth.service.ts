@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
 export interface LoginDto {
@@ -13,11 +13,12 @@ export interface RegisterDto {
   motDePasse: string;
 }
 
-export interface MeDto {
+export interface CurrentUser {
   id: number;
   email: string;
   role: string;
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,21 +26,45 @@ export interface MeDto {
 export class AuthService {
 
   private readonly api = environment.API_BASE_URL;
-
+  private currentUserSubject = new BehaviorSubject<CurrentUser | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
   constructor(private http: HttpClient) {}
 
-  checkAuth(): Observable<any> {
-    return this.http.get(`${this.api}/auth/me`, {
-      withCredentials: true
-    });
+
+  loadCurrentUser(): Observable<CurrentUser>{
+    return this.http.get<CurrentUser>(`${this.api}/auth/me`,
+      {withCredentials: true}).pipe(
+        tap(user => this.currentUserSubject.next(user))
+    );
   }
 
-  login(dto: LoginDto): Observable<void> {
-    return this.http.post<void>(
+  getCurrentUser():CurrentUser | null{
+    return this.currentUserSubject.value;
+  }
+  private roleSubject = new BehaviorSubject<string | null>(
+    localStorage.getItem('role')
+  );
+
+  role$ = this.roleSubject.asObservable();
+
+  setRole(role: string) {
+    localStorage.setItem('role', role);
+    this.roleSubject.next(role);
+  }
+
+  clearRole() {
+    localStorage.removeItem('role');
+    this.roleSubject.next(null);
+  }
+
+  login(dto: LoginDto): Observable<{ role: string }> {
+    return this.http.post<{ role: string }>(
       `${this.api}/auth/login`,
       dto,
-      { withCredentials: true }
-    );
+      { withCredentials: true },
+    ).pipe(tap(response => {
+      this.setRole(response.role);
+    }));
   }
 
   register(dto: RegisterDto): Observable<void> {
@@ -50,24 +75,38 @@ export class AuthService {
     );
   }
 
-  // --- 👇 CORRECTION MAJEURE ICI 👇 ---
-  // On appelle '/user/me' (UserController) car c'est lui qui renvoie le JSON { role: "Admin", ... }
-  // L'ancien '/auth/me' renvoyait vide, ce qui faisait planter le login.
-  me(): Observable<MeDto> {
-    return this.http.get<MeDto>(
-      `${this.api}/user/me`,
+  me(): Observable<CurrentUser> {
+    return this.http.get<CurrentUser>(
+      `${this.api}/auth/me`,
       { withCredentials: true }
     );
   }
-  // ------------------------------------
 
   logout(): Observable<void> {
+    this.clearRole();
     return this.http.post<void>(
       `${this.api}/auth/logout`,
       {},
       {
         withCredentials: true,
         responseType: 'text' as 'json'
+      }
+    );
+  }
+  // 🔁 DEMANDE RESET (depuis login)
+  requestPasswordReset(email: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.api}/auth/password-reset/request`,
+      { email }
+    );
+  }
+  // 🔐 CONFIRMATION RESET (depuis reset-password)
+  confirmPasswordReset(token: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.api}/auth/password-reset/confirm`,
+      {
+        token,
+        newPassword
       }
     );
   }

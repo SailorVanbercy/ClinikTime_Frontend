@@ -2,26 +2,34 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
 
-  form!: FormGroup;
+  form: FormGroup;
   error?: string;
   loading = false;
+
+  showReset = false;
+  resetEmail = '';
+  resetMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -35,29 +43,16 @@ export class LoginComponent {
     this.loading = true;
     this.error = undefined;
 
-    // 1. Login (Cookie)
     this.auth.login(this.form.value).subscribe({
       next: () => {
-        console.log('LOGIN OK - Récupération du profil...');
-
-        // 2. Récupération du profil (Qui suis-je ?)
         this.auth.me().subscribe({
           next: (user) => {
-            console.log('Profil récupéré :', user);
-
-            // On sauvegarde le rôle pour le Guard et la Navbar
             localStorage.setItem('role', user.role);
-
             this.loading = false;
-
-            // --- CORRECTION ICI ---
-            // On redirige tout le monde vers l'accueil, même les admins.
             this.router.navigate(['/home']);
           },
-          error: (err) => {
-            console.error('Erreur récupération profil', err);
+          error: () => {
             this.loading = false;
-            // En cas d'erreur technique, on envoie quand même à l'accueil
             this.router.navigate(['/home']);
           }
         });
@@ -67,5 +62,23 @@ export class LoginComponent {
         this.loading = false;
       }
     });
+  }
+
+  toggleReset(): void {
+    this.showReset = !this.showReset;
+    this.resetMessage = null;
+  }
+
+  onForgotPassword(): void {
+    if (!this.resetEmail || this.resetEmail.trim() === '') {
+      this.resetMessage = 'Veuillez entrer votre email';
+      return;
+    }
+
+    this.auth.requestPasswordReset(this.resetEmail)
+      .subscribe(() => {
+        this.resetMessage =
+          'Si un compte existe, un email de réinitialisation a été envoyé';
+      });
   }
 }

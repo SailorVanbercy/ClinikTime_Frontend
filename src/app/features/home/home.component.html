@@ -1,56 +1,224 @@
+<app-navbar></app-navbar>
 <div class="home-container">
 
-  <app-navbar></app-navbar>
-
+  <!-- HERO / SEARCH -->
   <section class="hero-section">
     <div class="hero-content">
       <h1>Prenez soin de votre santé</h1>
       <p>Trouvez un rendez-vous rapide avec un praticien qualifié.</p>
 
-      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-bar">
+      <form
+        [formGroup]="searchForm"
+        (ngSubmit)="onSearch($event)"
+        class="search-bar">
 
         <div class="input-group">
           <i>🔍</i>
-          <input type="text" formControlName="term" placeholder="Médecin, spécialité (ex: Dentiste)">
+          <input
+            type="text"
+            formControlName="term"
+            placeholder="Spécialité (ex: Dentiste)">
         </div>
 
         <div class="divider"></div>
 
-        <div class="input-group">
-          <i>📍</i>
-          <input type="text" formControlName="location" placeholder="Où ? (ex: Bruxelles)">
-        </div>
-
         <button type="submit">Rechercher</button>
       </form>
-
     </div>
   </section>
+
+  <!-- 🔎 RESULTATS -->
+  <section class="info-section" *ngIf="searched">
+
+    <h2>Résultats de recherche</h2>
+
+    <p *ngIf="loading">🔄 Recherche en cours...</p>
+
+    <p *ngIf="!loading && medecins.length === 0">
+      Aucun médecin trouvé pour cette spécialité.
+    </p>
+
+    <div class="cards-grid" *ngIf="!loading && medecins.length > 0">
+      <div class="card" *ngFor="let m of medecins">
+
+        <div class="card-header">
+          <div class="avatar-circle">
+            {{ getInitial(m.prenom) }}
+          </div>
+
+          <div>
+            <h3>Dr {{ m.prenom }} {{ m.nom }}</h3>
+            <span>📞 {{ m.telephone }}</span><br>
+            <span>🧑‍⚕️ {{getSpecialiteName(m.specialiteId)}}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <button
+            class="btn-outline"
+            (click)="openRdvPanel(m)">
+            Prendre rendez-vous
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 🩺 PANEL PRISE DE RENDEZ-VOUS -->
+  <div class="rdv-overlay" *ngIf="showRdvPanel" (click)="closeRdvPanel()">
+    <div class="rdv-panel" (click)="$event.stopPropagation()">
+
+      <div class="rdv-header">
+        <div>
+          <h2>Prendre rendez-vous</h2>
+          <p class="rdv-subtitle" *ngIf="selectedMedecin">
+            Avec <strong>Dr {{ selectedMedecin.prenom }} {{ selectedMedecin.nom }}</strong>
+          </p>
+        </div>
+
+        <button class="rdv-close" type="button" (click)="closeRdvPanel()">✕</button>
+      </div>
+
+      <div class="rdv-form">
+
+        <!-- Fiche patient -->
+        <div class="rdv-field">
+          <label>Fiche patient</label>
+          <select [(ngModel)]="selectedFichePatientId">
+            <option [ngValue]="null">-- choisir --</option>
+            <option *ngFor="let f of fichesPatients" [ngValue]="f.id ?? null">
+              {{ f.prenom }} {{ f.nom }} ({{ f.lienParente }})
+            </option>
+          </select>
+          <p class="rdv-hint" *ngIf="fichesPatients.length === 0">
+            Vous n'avez pas encore de fiche patient. Créez-en une dans votre profil.
+          </p>
+        </div>
+
+        <!-- Date -->
+        <div class="rdv-field">
+          <label>Date</label>
+          <input
+            type="date"
+            [(ngModel)]="selectedDate"
+            (ngModelChange)="loadCreneaux()" />
+        </div>
+
+        <!-- Motif -->
+        <div class="rdv-field">
+          <label>Motif (optionnel)</label>
+          <input
+            type="text"
+            [(ngModel)]="motif"
+            placeholder="Ex: contrôle, douleur, consultation..." />
+        </div>
+
+        <!-- Créneaux -->
+        <div class="rdv-field">
+          <div class="rdv-creneaux-head">
+            <label>Créneaux disponibles</label>
+            <button
+              type="button"
+              class="btn-outline rdv-refresh"
+              (click)="loadCreneaux()"
+              [disabled]="!selectedDate || !selectedMedecin">
+              Rafraîchir
+            </button>
+          </div>
+
+          <p *ngIf="loadingCreneaux">🔄 Chargement des créneaux...</p>
+
+          <p *ngIf="!loadingCreneaux && selectedDate && creneauxLibres.length === 0">
+            Aucun créneau disponible pour cette date.
+          </p>
+
+          <!-- ✅ AFFICHAGE CORRECT DES CRENEAUX -->
+          <div class="creneaux-grid" *ngIf="!loadingCreneaux && creneauxLibres.length > 0">
+            <button
+              type="button"
+              class="creneau"
+              *ngFor="let c of creneauxLibres"
+              [class.selected]="c === selectedCreneau"
+              (click)="selectCreneau(c)">
+              {{ c.debut | date:'HH:mm' }} – {{ c.fin | date:'HH:mm' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="rdv-actions">
+          <button type="button" class="btn-cancel" (click)="closeRdvPanel()">
+            Annuler
+          </button>
+
+          <button
+            type="button"
+            class="btn-primary"
+            (click)="confirmerRdv()"
+            [disabled]="!selectedFichePatientId || !selectedCreneau || !selectedMedecin">
+            Confirmer le rendez-vous
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <section class="info-section">
     <h2>Vos derniers rendez-vous</h2>
 
     <div class="cards-grid">
-      <div class="card" *ngFor="let rdv of lastAppointments">
+
+      <!-- ⏳ Chargement -->
+      <p *ngIf="(myRendezVous$ | async) === null">
+        Chargement de vos rendez-vous...
+      </p>
+
+      <!-- ❌ Aucun RDV -->
+      <p *ngIf="(myRendezVous$ | async)?.length === 0">
+        Vous n’avez encore aucun rendez-vous.
+      </p>
+
+      <!-- ✅ LISTE RDV -->
+      <div
+        class="card"
+        *ngFor="let rdv of (myRendezVous$ | async)">
+
         <div class="card-header">
-          <div class="avatar-circle">{{ rdv.doctor.charAt(4) }}</div>
+          <div class="avatar-circle">
+            {{ getInitial(rdv.medecinPrenom) }}
+          </div>
+
           <div>
-            <h3>{{ rdv.doctor }}</h3>
-            <span>{{ rdv.specialty }}</span>
+            <h3>
+              Dr {{ rdv.medecinPrenom }} {{ rdv.medecinNom }}
+            </h3>
+            <span>🩺 {{ rdv.specialite }}</span>
           </div>
         </div>
-        <div class="card-body">
-          <p>📅 {{ rdv.date }} à {{ rdv.time }}</p>
-          <button class="btn-outline">Reprendre RDV</button>
-        </div>
-      </div>
 
-      <div class="card promo-card">
-        <h3>Besoin d'un check-up ?</h3>
-        <p>Découvrez nos médecins généralistes disponibles aujourd'hui.</p>
-        <button class="btn-link">Voir les disponibilités</button>
+        <div class="card-body">
+          <p>📅 {{ rdv.debut | date:'dd/MM/yyyy' }}</p>
+          <p>⏰ {{ rdv.debut | date:'HH:mm' }} – {{ rdv.fin | date:'HH:mm' }}</p>
+
+          <p *ngIf="rdv.motif">
+            📝 {{ rdv.motif }}
+          </p>
+
+          <span class="badge"
+                [ngClass]="{
+                'badge-success': rdv.statut === 'CONFIRME',
+                'badge-warning': rdv.statut === 'EN_ATTENTE',
+                'badge-danger': rdv.statut === 'ANNULE'
+              }">
+          {{ rdv.statut }}
+        </span>
+          <button class="btn-annuler" (click)="deleteRdv(rdv.id)">Supprimer rdv</button>
+        </div>
+
       </div>
     </div>
   </section>
+
 
 </div>

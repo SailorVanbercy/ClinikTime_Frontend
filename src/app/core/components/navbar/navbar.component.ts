@@ -16,7 +16,7 @@ export class NavbarComponent {
   router = inject(Router);
 
   // On vérifie le rôle pour afficher le bouton "Admin" ou non
-  isAdmin = localStorage.getItem('role') === 'Admin';
+  role$ = this.authService.role$;
 
   logout() {
     this.authService.logout().subscribe({

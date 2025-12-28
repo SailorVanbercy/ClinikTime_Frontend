@@ -2,7 +2,7 @@
 
 <div class="admin-bg">
 
-  <h2 style="text-align: center; color: #1e40af; padding-top: 20px;">
+  <h2 class="page-title">
     Dashboard Admin - Gestion des Accès
   </h2>
 
@@ -24,7 +24,7 @@
       <thead>
       <tr>
         <th>Email (Trié A-Z)</th>
-        <th>Role</th>
+        <th>Rôle</th>
         <th>Action</th>
       </tr>
       </thead>
@@ -37,15 +37,15 @@
             </td>
             <td>
               @if (user.role === 'User') {
-                <button class="btn-promote" (click)="promote(user)">Passer Médecin</button>
+                <button class="btn-promote" (click)="openPromoteModal(user)">Passer Médecin</button>
               } @else {
-                <span style="opacity: 0.5; font-style: italic;">Déjà {{ user.role }}</span>
+                <span class="deja-role">Déjà {{ user.role }}</span>
               }
             </td>
           </tr>
         }
         @empty {
-          <tr><td colspan="3" style="text-align: center; padding: 20px; color: #666;">Aucun résultat</td></tr>
+          <tr><td colspan="3" class="empty-state">Aucun résultat trouvé</td></tr>
         }
       </tbody>
     </table>
@@ -69,6 +69,45 @@
         </button>
       </div>
     }
-
   </div>
 </div>
+
+@if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Promouvoir en Médecin</h3>
+      <p class="modal-subtitle">Complétez le profil pour <strong>{{ selectedUser?.email }}</strong></p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" [(ngModel)]="medecinForm.nom" placeholder="Nom">
+        </div>
+
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" [(ngModel)]="medecinForm.prenom" placeholder="Prénom">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone Professionnel</label>
+        <input type="text" [(ngModel)]="medecinForm.telephone" placeholder="ex: 04 12 34 56 78">
+      </div>
+
+      <div class="form-group">
+        <label>Spécialité</label>
+        <select [(ngModel)]="medecinForm.specialiteId">
+          @for (spec of specialites; track spec.id) {
+            <option [value]="spec.id">{{ spec.nom }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+        <button class="btn-confirm" (click)="confirmPromote()">Valider & Promouvoir</button>
+      </div>
+    </div>
+  </div>
+}

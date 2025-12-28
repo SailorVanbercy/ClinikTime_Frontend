@@ -1,17 +1,24 @@
 <nav class="navbar">
+
   <div class="logo">
     <a routerLink="/home">🩺 ClinikTime</a>
   </div>
 
-  <div class="nav-links">
-    <a routerLink="/home" class="nav-link">Accueil</a>
+  @if (role$ | async){
+    @let role = role$ | async;
+    <div class="nav-links">
+      <a routerLink="/home" class="nav-link">Accueil</a>
 
-    @if (isAdmin) {
-      <a routerLink="/admin/dashboard" class="nav-link admin-link">Dashboard Admin</a>
-    }
+      @if (role === 'Admin') {
+        <a routerLink="/admin/dashboard" class="nav-link admin-link">Dashboard Admin</a>
+      }
 
-    <a routerLink="/profile" class="nav-link">Mon Profil</a>
+      <a routerLink="/profile" class="nav-link">Mon Profil</a>
+      @if (role == 'Medecin'){
+        <a routerLink="/medecin" class="nav-link">Espace Médecin</a>
+      }
 
-    <button (click)="logout()" class="btn-logout">Déconnexion</button>
-  </div>
+      <button (click)="logout()" class="btn-logout">Déconnexion</button>
+    </div>
+  }
 </nav>

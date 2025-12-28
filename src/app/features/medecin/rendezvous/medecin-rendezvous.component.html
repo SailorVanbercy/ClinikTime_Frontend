@@ -1,0 +1,52 @@
+<div class="container">
+
+  <header class="page-header">
+    <h1>🗓️ Gestion des rendez-vous</h1>
+    <p class="subtitle">Rendez-vous à venir</p>
+  </header>
+
+  <ng-container *ngIf="rendezVous$ | async as rdvs">
+
+    <div *ngIf="rdvs.length === 0" class="empty-state">
+      😕 Aucun rendez-vous à venir
+    </div>
+
+    <div *ngFor="let r of rdvs" class="rdv-card">
+
+      <div class="rdv-info">
+        <strong>
+          {{ r.debut | date:'dd/MM/yyyy' }}
+          —
+          {{ r.debut | date:'HH:mm' }} → {{ r.fin | date:'HH:mm' }}
+        </strong>
+
+        <p>👤 {{ r.patientPrenom }} {{ r.patientNom }}</p>
+        <span class="motif">📝 {{ r.motif }}</span>
+      </div>
+
+      <div class="rdv-actions">
+        <button class="btn-refuser" (click)="refuser(r.id)">❌ Refuser</button>
+        <button class="btn-reprogrammer" (click)="ouvrirReprogrammation(r.id)">🔄 Reprogrammer</button>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>
+
+<!-- MODALE REPROGRAMMATION -->
+<div class="modal-backdrop" *ngIf="showReprogrammer">
+  <div class="modal">
+    <h3>Reprogrammer le rendez-vous</h3>
+
+    <form [formGroup]="form">
+      <input type="datetime-local" formControlName="nouvelleDate">
+    </form>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="annulerReprogrammation()">Annuler</button>
+      <button class="btn-confirm" (click)="confirmerReprogrammation()">Confirmer</button>
+    </div>
+  </div>
+</div>

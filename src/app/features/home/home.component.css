@@ -15,9 +15,67 @@
   overflow-x: clip;
 }
 
-/* ❌ J'AI SUPPRIMÉ TOUTE LA SECTION NAVBAR ICI
-   CAR ELLE EST DANS NAVBAR.COMPONENT.CSS
-*/
+/* =========================
+   NAVBAR
+========================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 15px 20px;
+  width: 100%;
+  max-width: 100%;
+
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  overflow-x: hidden;
+}
+
+.logo span {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e40af;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #3b82f6;
+}
+
+.btn-logout {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #ef4444;
+  color: white;
+}
 
 /* =========================
    HERO SECTION
@@ -117,37 +175,55 @@
 }
 
 /* =========================
-   INFO SECTION
+   INFO SECTION (FIX VISUEL MAJEUR)
 ========================= */
 .info-section {
   width: 100%;
   max-width: 1200px;
 
-  margin: 50px auto;
-  padding: 0 20px;
+  margin: 60px auto;
+  padding: 40px 30px;
 
+  background-color: #ffffff;
+  border-radius: 24px;
+
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
 }
 
 /* =========================
-   CARDS GRID
+   CARDS GRID (FORCÉ VISIBLE)
 ========================= */
 .cards-grid {
-  display: grid;
+  display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 
   width: 100%;
   max-width: 100%;
+  margin-top: 30px;
+
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
+/* =========================
+   CARD
+========================= */
 .card {
   background: white;
   border-radius: 16px;
   padding: 20px;
 
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -184,6 +260,9 @@
   color: #6b7280;
 }
 
+/* =========================
+   BUTTON
+========================= */
 .btn-outline {
   width: 100%;
   padding: 10px;
@@ -239,3 +318,465 @@ img {
   height: auto;
   display: block;
 }
+/* =========================
+   RDV FORM – AMÉLIORATION UX
+========================= */
+
+/* Champs du formulaire */
+.rdv-field input,
+.rdv-field select {
+  background-color: #f9fafb;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rdv-field input::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus clair et moderne */
+.rdv-field input:focus,
+.rdv-field select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  background-color: #ffffff;
+}
+
+/* Séparation visuelle entre sections */
+.rdv-field:not(:last-child) {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* =========================
+   CRÉNEAUX
+========================= */
+
+.creneaux-grid {
+  margin-top: 16px;
+}
+
+.creneau {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  color: #1f2937;
+
+  padding: 10px 0;
+  border-radius: 14px;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  transition: all 0.15s ease;
+}
+
+.creneau:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  transform: translateY(-1px);
+}
+
+/* Créneau sélectionné */
+.creneau.selected {
+  border-color: #2563eb;
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  color: #ffffff;
+  box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.7);
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.rdv-actions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.btn-cancel:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-primary {
+  min-width: 200px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 12px 24px -12px rgba(30, 64, 175, 0.8);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+}
+
+.btn-primary[disabled] {
+  background: #94a3b8;
+  box-shadow: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+  .rdv-panel {
+    padding: 18px 16px;
+    border-radius: 18px;
+  }
+
+  .rdv-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-primary,
+  .btn-cancel {
+    width: 100%;
+  }
+}
+/* =========================
+   RDV MODAL – STRUCTURE
+========================= */
+
+.rdv-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: linear-gradient(
+    rgba(15, 23, 42, 0.55),
+    rgba(15, 23, 42, 0.65)
+  );
+
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  z-index: 3000;
+}
+
+
+.rdv-panel {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #f8fafc 100%
+  );
+
+  width: 100%;
+  max-width: 720px;
+
+  border-radius: 28px;
+  padding: 26px 28px;
+
+  box-shadow:
+    0 40px 80px -30px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
+
+  animation: rdvAppear 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+@keyframes rdvAppear {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================
+   RDV HEADER
+========================= */
+
+.rdv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+.rdv-header h2 {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+
+.rdv-subtitle {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.rdv-close {
+  border: none;
+  background: #f1f5f9;
+  color: #0f172a;
+
+  border-radius: 14px;
+  padding: 10px 14px;
+
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 700;
+
+  transition: all 0.15s ease;
+}
+
+.rdv-close:hover {
+  background: #e2e8f0;
+  transform: scale(1.05);
+}
+
+.rdv-close:active {
+  transform: scale(0.95);
+}
+
+
+/* =========================
+   RDV FORM CONTAINER
+========================= */
+
+.rdv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================
+   CHAMPS FORMULAIRES RDV
+========================= */
+
+.rdv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px 16px;
+
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+}
+
+.rdv-field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* INPUT / SELECT UNIFIÉS */
+.rdv-field input,
+.rdv-field select {
+  width: 100%;
+  height: 44px;
+
+  padding: 0 14px;
+  border-radius: 12px;
+
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+
+  font-size: 0.95rem;
+  color: #0f172a;
+
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+/* Focus */
+.rdv-field input:focus,
+.rdv-field select:focus {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.rdv-field select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%2364748b' d='M5.5 7.5l4.5 4.5 4.5-4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px;
+
+  padding-right: 44px;
+}
+
+/* Date picker */
+.rdv-field input[type="date"] {
+  padding-right: 14px;
+}
+
+/* Icône calendrier (Chrome / Edge) */
+.rdv-field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(36%) sepia(9%) saturate(500%) hue-rotate(180deg);
+  opacity: 0.7;
+}
+
+.rdv-field input[type="date"]:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+.rdv-creneaux-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rdv-refresh {
+  height: 36px;
+  padding: 0 14px;
+
+  border-radius: 10px;
+  border: 1.5px solid #3b82f6;
+  background: #ffffff;
+
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 0.85rem;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rdv-refresh:hover {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+/* =========================
+   ACTIONS RDV
+========================= */
+
+.rdv-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Annuler */
+.btn-cancel {
+  padding: 10px 18px;
+  border-radius: 12px;
+
+  border: 1.5px solid #cbd5f5;
+  background: #ffffff;
+
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.15s ease;
+}
+
+.btn-cancel:hover {
+  background: #f1f5f9;
+}
+
+/* Confirmer */
+.btn-primary {
+  padding: 12px 22px;
+  border-radius: 14px;
+
+  border: none;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.35);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+
+/* =========================
+   Bouton Annuler RDV
+========================= */
+
+.btn-annuler {
+  margin-top: 12px;
+  padding: 8px 14px;
+  border-radius: 8px;
+
+  background-color: #fff;
+  border: 1.5px solid #e74c3c;
+
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 0.9rem;
+
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-annuler::before {
+  content: "✖";
+  font-size: 0.85rem;
+}
+
+/* Hover */
+.btn-annuler:hover {
+  background-color: #e74c3c;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(231, 76, 60, 0.25);
+}
+
+/* Focus clavier (accessibilité) */
+.btn-annuler:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.25);
+}
+
+/* Désactivé */
+.btn-annuler:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background-color: #f8f8f8;
+  border-color: #ddd;
+  color: #aaa;
+  box-shadow: none;
+}
+
