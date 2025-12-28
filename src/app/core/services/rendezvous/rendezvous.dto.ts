@@ -11,4 +11,15 @@ export interface CreneauLibreDto{
   debut:string;
   fin:string;
 }
+export interface RendezVousDto{
+  id: number;
+  debut: string;        // ISO
+  fin: string;          // ISO
+  statut: string;
+  motif: string;
+  medecinId: number;
+  medecinNom: string;
+  medecinPrenom: string;
+  specialite: string;
+}
 

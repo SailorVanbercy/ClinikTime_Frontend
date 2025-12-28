@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -8,16 +8,19 @@ import { MedecinService, MedecinDto } from '../../core/services/medecin/medecin.
 import { RendezVousService } from '../../core/services/rendezvous/rendezvous.service';
 import { PatientService } from '../../core/services/patient.service';
 import { Patient } from '../../core/models/patient.model';
-import { CreneauLibreDto } from '../../core/services/rendezvous/rendezvous.dto';
+import {CreneauLibreDto, RendezVousDto} from '../../core/services/rendezvous/rendezvous.dto';
+import {NavbarComponent} from '../../core/components/navbar/navbar.component';
+import {BehaviorSubject, Observable, switchMap} from 'rxjs';
+import {DashboardComponent} from '../admin/pages/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, NavbarComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
 
   searchForm: FormGroup;
 
@@ -47,11 +50,9 @@ export class HomeComponent {
   creneauxLibres: CreneauLibreDto[] = [];
   selectedCreneau: CreneauLibreDto | null = null;
 
-  // Données fictives conservées
-  lastAppointments = [
-    { doctor: 'Dr. Martin Dupont', specialty: 'Dentiste', date: '12 Nov', time: '14:00' },
-    { doctor: 'Dr. Sophie Legrand', specialty: 'Généraliste', date: '10 Oct', time: '09:30' }
-  ];
+  //RDV
+  private refresh$ = new BehaviorSubject<void>(undefined);
+  myRendezVous$: Observable<RendezVousDto[]> = this.refresh$.pipe(switchMap(() =>this.rendezvousService.getMyRendezVous()));
 
   constructor(
     private fb: FormBuilder,
@@ -60,12 +61,62 @@ export class HomeComponent {
     private medecinService: MedecinService,
     private rendezvousService: RendezVousService,
     private patientService: PatientService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.searchForm = this.fb.group({
       term: ['']
     });
   }
+
+  ngOnInit(): void {
+        if(this.authService.me()){
+          this.refresh$.next();
+        }
+    }
+
+  // --- LISTE DES SPÉCIALITÉS ---
+  specialites = [
+    { id: 1, nom: 'Médecine générale' },
+    { id: 2, nom: 'Médecine familiale' },
+    { id: 3, nom: 'Pédiatrie' },
+    { id: 4, nom: 'Gynécologie' },
+    { id: 5, nom: 'Cardiologie' },
+    { id: 6, nom: 'Dermatologie' },
+    { id: 7, nom: 'Ophtalmologie' },
+    { id: 8, nom: 'ORL' },
+    { id: 9, nom: 'Neurologie' },
+    { id: 10, nom: 'Psychiatrie' },
+    { id: 11, nom: 'Psychologie' },
+    { id: 12, nom: 'Chirurgie générale' },
+    { id: 13, nom: 'Chirurgie orthopédique' },
+    { id: 14, nom: 'Chirurgie plastique' },
+    { id: 15, nom: 'Neurochirurgie' },
+    { id: 16, nom: 'Chirurgie vasculaire' },
+    { id: 17, nom: 'Endocrinologie' },
+    { id: 18, nom: 'Gastro-entérologie' },
+    { id: 19, nom: 'Néphrologie' },
+    { id: 20, nom: 'Pneumologie' },
+    { id: 21, nom: 'Rhumatologie' },
+    { id: 22, nom: 'Hématologie' },
+    { id: 23, nom: 'Oncologie' },
+    { id: 24, nom: 'Gériatrie' },
+    { id: 25, nom: 'Kinésithérapie' },
+    { id: 26, nom: 'Ostéopathie' },
+    { id: 27, nom: 'Podologie' },
+    { id: 28, nom: 'Diététique' },
+    { id: 29, nom: 'Logopédie' },
+    { id: 30, nom: 'Médecine d’urgence' },
+    { id: 31, nom: 'Médecine du sport' },
+    { id: 32, nom: 'Médecine du travail' },
+    { id: 33, nom: 'Médecine préventive' },
+    { id: 34, nom: 'Sexologie' },
+    { id: 35, nom: 'Addictologie' },
+    { id: 36, nom: 'Psychiatrie infantile' },
+    { id: 37, nom: 'Radiologie' },
+    { id: 38, nom: 'Anesthésiologie' },
+    { id: 39, nom: 'Médecine nucléaire' }
+  ];
+
 
   // =========================
   // Panel RDV
@@ -161,12 +212,31 @@ export class HomeComponent {
       next: () => {
         alert('Rendez-vous créé ✅');
         this.closeRdvPanel();
+        this.refresh$.next();
       },
       error: (err) => {
         console.error('ERREUR creation rendezvous', err);
         alert('Impossible de créer le rendez-vous ❌');
       }
     });
+  }
+
+  //DELETE RDV
+  deleteRdv(id : number) : void {
+    if(!confirm("Vous voulez vraiment annuler ce rendez vous ?")){
+      return;
+    }
+
+    this.rendezvousService.annulerRdv(id).subscribe({
+      next: () => {
+        alert('Rendez vous annulé ✅');
+        this.refresh$.next();
+      },
+      error: (err) => {
+        console.error('Erreur annulation rdv', err);
+        alert("Impossible d\'annuler le rendez-vous");
+      }
+    })
   }
 
   // =========================
@@ -186,6 +256,7 @@ export class HomeComponent {
         console.log('MEDECINS RECUS', result);
         this.medecins = result ?? [];
         this.loading = false;
+
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -207,5 +278,10 @@ export class HomeComponent {
     return value && value.length > 0
       ? value.charAt(0).toUpperCase()
       : '?';
+  }
+  getSpecialiteName(specialiteId: number | null | undefined): string{
+    if(!specialiteId) return 'Spécialité inconnue';
+    const spec = this.specialites.find(s => s.id === specialiteId);
+    return spec ? spec.nom : 'Specialité inconnue'
   }
 }

@@ -1,26 +1,5 @@
+<app-navbar></app-navbar>
 <div class="home-container">
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="logo">
-      <span>🩺 ClinikTime</span>
-    </div>
-
-    <div class="nav-links">
-      <a routerLink="/profile" class="nav-link">Mon Profil</a>
-
-      <a
-        *ngIf="(authService.currentUser$ | async)?.role === 'Medecin'"
-        routerLink="/medecin"
-        class="nav-link">
-        Espace Médecin
-      </a>
-
-      <button (click)="logout()" class="btn-logout">
-        Déconnexion
-      </button>
-    </div>
-  </nav>
 
   <!-- HERO / SEARCH -->
   <section class="hero-section">
@@ -69,10 +48,10 @@
 
           <div>
             <h3>Dr {{ m.prenom }} {{ m.nom }}</h3>
-            <span>📞 {{ m.telephone }}</span>
+            <span>📞 {{ m.telephone }}</span><br>
+            <span>🧑‍⚕️ {{getSpecialiteName(m.specialiteId)}}</span>
           </div>
         </div>
-
         <div class="card-body">
           <button
             class="btn-outline"
@@ -83,7 +62,6 @@
 
       </div>
     </div>
-
   </section>
 
   <!-- 🩺 PANEL PRISE DE RENDEZ-VOUS -->
@@ -123,7 +101,7 @@
           <input
             type="date"
             [(ngModel)]="selectedDate"
-            (change)="loadCreneaux()" />
+            (ngModelChange)="loadCreneaux()" />
         </div>
 
         <!-- Motif -->
@@ -186,37 +164,61 @@
     </div>
   </div>
 
-  <!-- 🕒 DERNIERS RDV -->
-  <section class="info-section" *ngIf="!searched">
+  <section class="info-section">
     <h2>Vos derniers rendez-vous</h2>
 
     <div class="cards-grid">
-      <div class="card" *ngFor="let rdv of lastAppointments">
+
+      <!-- ⏳ Chargement -->
+      <p *ngIf="(myRendezVous$ | async) === null">
+        Chargement de vos rendez-vous...
+      </p>
+
+      <!-- ❌ Aucun RDV -->
+      <p *ngIf="(myRendezVous$ | async)?.length === 0">
+        Vous n’avez encore aucun rendez-vous.
+      </p>
+
+      <!-- ✅ LISTE RDV -->
+      <div
+        class="card"
+        *ngFor="let rdv of (myRendezVous$ | async)">
 
         <div class="card-header">
           <div class="avatar-circle">
-            {{ getInitial(rdv.doctor) }}
+            {{ getInitial(rdv.medecinPrenom) }}
           </div>
 
           <div>
-            <h3>{{ rdv.doctor }}</h3>
-            <span>{{ rdv.specialty }}</span>
+            <h3>
+              Dr {{ rdv.medecinPrenom }} {{ rdv.medecinNom }}
+            </h3>
+            <span>🩺 {{ rdv.specialite }}</span>
           </div>
         </div>
 
         <div class="card-body">
-          <p>📅 {{ rdv.date }} à {{ rdv.time }}</p>
-          <button class="btn-outline">Reprendre RDV</button>
+          <p>📅 {{ rdv.debut | date:'dd/MM/yyyy' }}</p>
+          <p>⏰ {{ rdv.debut | date:'HH:mm' }} – {{ rdv.fin | date:'HH:mm' }}</p>
+
+          <p *ngIf="rdv.motif">
+            📝 {{ rdv.motif }}
+          </p>
+
+          <span class="badge"
+                [ngClass]="{
+                'badge-success': rdv.statut === 'CONFIRME',
+                'badge-warning': rdv.statut === 'EN_ATTENTE',
+                'badge-danger': rdv.statut === 'ANNULE'
+              }">
+          {{ rdv.statut }}
+        </span>
+          <button class="btn-annuler" (click)="deleteRdv(rdv.id)">Supprimer rdv</button>
         </div>
 
       </div>
-
-      <div class="card promo-card">
-        <h3>Besoin d'un check-up ?</h3>
-        <p>Découvrez nos médecins généralistes disponibles aujourd'hui.</p>
-        <button class="btn-link">Voir les disponibilités</button>
-      </div>
     </div>
   </section>
+
 
 </div>

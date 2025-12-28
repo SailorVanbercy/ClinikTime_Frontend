@@ -33,4 +33,10 @@ export class MedecinService {
       }
     );
   }
+  getSpecialiteNom(id : number) : Observable<string>{
+    return this.http.get<string>(`${this.api}/medecin/getSpecialiteName`,
+      {
+        withCredentials: true
+      });
+  }
 }

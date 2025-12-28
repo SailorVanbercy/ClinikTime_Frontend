@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { CreneauLibreDto, CreateRendezVousDto } from './rendezvous.dto';
+import {CreneauLibreDto, CreateRendezVousDto, RendezVousDto} from './rendezvous.dto';
 
 @Injectable({ providedIn: 'root' })
 export class RendezVousService {
@@ -34,4 +34,19 @@ export class RendezVousService {
       }
     );
   }
+  getMyRendezVous(): Observable<RendezVousDto[]> {
+    return this.http.get<RendezVousDto[]>(
+      `${this.api}/rendezvous/me`,
+      { withCredentials: true }
+    );
+  }
+
+  annulerRdv(id: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.api}/rendezvous/${id}/annuler`,
+      {},                       // ✅ body (vide)
+      { withCredentials: true } // ✅ options
+    );
+  }
+
 }

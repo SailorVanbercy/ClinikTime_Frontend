@@ -1,0 +1,65 @@
+/* GLOBAL FONT */
+:host {
+  display: block;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo a {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e40af;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #3b82f6;
+}
+
+/* Style spécial pour le lien Admin */
+.admin-link {
+  color: #ef4444; /* Rouge ou une couleur distincte */
+}
+
+.btn-logout {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.btn-logout:hover {
+  background-color: #ef4444;
+  color: white;
+}

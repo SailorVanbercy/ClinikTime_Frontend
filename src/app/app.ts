@@ -1,6 +1,7 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {Router, RouterOutlet} from '@angular/router';
-import {AuthService} from './core/services/auth.service';
+import { Component, OnInit, signal } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,24 +11,40 @@ import {AuthService} from './core/services/auth.service';
   styleUrl: './app.css'
 })
 export class App implements OnInit {
+
   protected readonly title = signal('ClinikTimeFrontend');
 
   constructor(
-    private authService : AuthService,
-    private router : Router
+    private authService: AuthService,
+    private router: Router
   ) {}
 
-  ngOnInit() {
-    this.authService.loadCurrentUser().subscribe({
-      next: user => {
-        //utilisateur déjà connecté
-        console.log('USER CHARGÉ', user);
-        this.router.navigate(['/home']);
-      },
-      error : () => {
-        //utilisateur non connecté
-        this.router.navigate(['/login']);
-      }
-    });
+  ngOnInit(): void {
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+
+        const currentPath = this.router.url.split('?')[0];
+
+        const publicRoutes = [
+          '/login',
+          '/register',
+          '/reset-password'
+        ];
+
+        // 🔓 Route publique → AUCUNE vérification
+        if (publicRoutes.includes(currentPath)) {
+          return;
+        }
+
+        // 🔐 Route protégée → vérification session
+        this.authService.loadCurrentUser().subscribe({
+          error: () => {
+            this.router.navigate(['/login']);
+          }
+        });
+
+      });
   }
 }

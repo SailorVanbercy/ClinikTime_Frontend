@@ -3,12 +3,17 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router'; // 1. Ajout de RouterModule
 import { PatientService } from '../../../../core/services/patient.service';
 import { Patient } from '../../../../core/models/patient.model';
-import { AuthService } from '../../../../core/services/auth.service'; // 2. Ajout de AuthService
+import { AuthService } from '../../../../core/services/auth.service';
+import {NavbarComponent} from '../../../../core/components/navbar/navbar.component'; // 2. Ajout de AuthService
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule], // 3. Ajout dans les imports du composant
+  imports: [
+    CommonModule,
+    RouterModule,
+    NavbarComponent // 2. AJOUT DANS LES IMPORTS
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -21,7 +26,7 @@ export class ProfileComponent implements OnInit {
     private patientService: PatientService,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private authService: AuthService // 4. Injection du service d'medecin
+    private authService: AuthService // 4. Injection du service d'auth
   ) {}
 
   ngOnInit() {
@@ -55,11 +60,5 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/create-profile']);
   }
 
-  // 5. Méthode pour se déconnecter
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: () => this.router.navigate(['/login'])
-    });
-  }
+  // La méthode logout() a été supprimée car <app-navbar> s'en occupe
 }

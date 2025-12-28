@@ -1,0 +1,113 @@
+<app-navbar></app-navbar>
+
+<div class="admin-bg">
+
+  <h2 class="page-title">
+    Dashboard Admin - Gestion des Accès
+  </h2>
+
+  <div class="search-section">
+    <div class="search-box">
+      <label>Rechercher un utilisateur :</label>
+      <div class="input-row">
+        <input type="text" [(ngModel)]="searchTerm" (keyup.enter)="search()" placeholder="Rechercher par email...">
+      </div>
+    </div>
+    <button class="btn-search" (click)="search()">Rechercher</button>
+  </div>
+
+  @if (message) { <div class="msg success">{{ message }}</div> }
+  @if (error) { <div class="msg error">{{ error }}</div> }
+
+  <div class="table-container">
+    <table class="users-table">
+      <thead>
+      <tr>
+        <th>Email (Trié A-Z)</th>
+        <th>Rôle</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of paginatedUsers; track user.id) {
+          <tr>
+            <td>{{ user.email }}</td>
+            <td>
+              <span [class]="'badge ' + user.role.toLowerCase()">{{ user.role }}</span>
+            </td>
+            <td>
+              @if (user.role === 'User') {
+                <button class="btn-promote" (click)="openPromoteModal(user)">Passer Médecin</button>
+              } @else {
+                <span class="deja-role">Déjà {{ user.role }}</span>
+              }
+            </td>
+          </tr>
+        }
+        @empty {
+          <tr><td colspan="3" class="empty-state">Aucun résultat trouvé</td></tr>
+        }
+      </tbody>
+    </table>
+
+    @if (allUsers.length > itemsPerPage) {
+      <div class="pagination-controls">
+        <button
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+          class="btn-page">
+          &laquo; Précédent
+        </button>
+
+        <span class="page-info">Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+          class="btn-page">
+          Suivant &raquo;
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Promouvoir en Médecin</h3>
+      <p class="modal-subtitle">Complétez le profil pour <strong>{{ selectedUser?.email }}</strong></p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" [(ngModel)]="medecinForm.nom" placeholder="Nom">
+        </div>
+
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" [(ngModel)]="medecinForm.prenom" placeholder="Prénom">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone Professionnel</label>
+        <input type="text" [(ngModel)]="medecinForm.telephone" placeholder="ex: 04 12 34 56 78">
+      </div>
+
+      <div class="form-group">
+        <label>Spécialité</label>
+        <select [(ngModel)]="medecinForm.specialiteId">
+          @for (spec of specialites; track spec.id) {
+            <option [value]="spec.id">{{ spec.nom }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+        <button class="btn-confirm" (click)="confirmPromote()">Valider & Promouvoir</button>
+      </div>
+    </div>
+  </div>
+}
