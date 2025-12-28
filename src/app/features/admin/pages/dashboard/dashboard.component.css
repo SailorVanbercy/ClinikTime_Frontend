@@ -4,20 +4,20 @@
 :host {
   display: block;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f3f4f6; /* Le même gris clair que Home/Profile */
+  background-color: #f3f4f6;
   min-height: 100vh;
 }
 
 .admin-bg {
-  max-width: 1200px; /* On limite la largeur pour que ce soit lisible */
+  max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
-h2 {
+.page-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #1e40af; /* Le bleu foncé de ton logo */
+  color: #1e40af;
   margin-bottom: 30px;
   text-align: center;
 }
@@ -31,15 +31,14 @@ h2 {
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   margin-bottom: 30px;
-
   display: flex;
-  align-items: flex-end; /* Aligne le bouton avec le champ */
+  align-items: flex-end;
   gap: 20px;
   flex-wrap: wrap;
 }
 
 .search-box {
-  flex: 1; /* Prend toute la place disponible */
+  flex: 1;
   min-width: 250px;
 }
 
@@ -54,75 +53,47 @@ h2 {
   width: 100%;
   padding: 12px 20px;
   border: 1px solid #d1d5db;
-  border-radius: 50px; /* Style arrondi comme sur le Home */
+  border-radius: 50px;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
   background-color: #f9fafb;
 }
 
 .input-row input:focus {
   border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .btn-search {
-  background-color: #1e40af; /* Bleu foncé */
+  background-color: #1e40af;
   color: white;
   border: none;
   padding: 12px 30px;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-  height: 46px; /* Pour matcher la hauteur de l'input */
+  height: 48px;
 }
 
 .btn-search:hover {
   background-color: #1e3a8a;
-  transform: translateY(-1px);
 }
 
 /* =========================
-   MESSAGES (ALERTS)
-========================= */
-.msg {
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 25px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.msg.success {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
-}
-
-.msg.error {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-}
-
-/* =========================
-   TABLEAU
+   TABLEAU & LISTE
 ========================= */
 .table-container {
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  overflow: hidden; /* Important pour les coins arrondis du tableau */
+  overflow: hidden;
   border: 1px solid #f3f4f6;
 }
 
 .users-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
 }
 
 .users-table th {
@@ -132,8 +103,8 @@ h2 {
   color: #64748b;
   text-transform: uppercase;
   font-size: 0.85rem;
-  letter-spacing: 0.05em;
   border-bottom: 1px solid #e2e8f0;
+  text-align: left;
 }
 
 .users-table td {
@@ -143,16 +114,21 @@ h2 {
   vertical-align: middle;
 }
 
-.users-table tr:last-child td {
-  border-bottom: none;
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+  font-style: italic;
 }
 
-.users-table tr:hover {
-  background-color: #f8fafc; /* Léger gris au survol de la ligne */
+.deja-role {
+  opacity: 0.5;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
 /* =========================
-   BADGES (Role)
+   BADGES & BOUTONS ACTION
 ========================= */
 .badge {
   display: inline-block;
@@ -160,28 +136,14 @@ h2 {
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 700;
-  text-align: center;
   min-width: 80px;
+  text-align: center;
 }
 
-.badge.user {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
+.badge.user { background-color: #f3f4f6; color: #4b5563; }
+.badge.medecin { background-color: #dbeafe; color: #1e40af; }
+.badge.admin { background-color: #fee2e2; color: #991b1b; }
 
-.badge.medecin {
-  background-color: #dbeafe;
-  color: #1e40af;
-}
-
-.badge.admin {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-/* =========================
-   BOUTON ACTION
-========================= */
 .btn-promote {
   background-color: white;
   color: #3b82f6;
@@ -191,13 +153,25 @@ h2 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.9rem;
 }
 
 .btn-promote:hover {
   background-color: #3b82f6;
   color: white;
 }
+
+/* =========================
+   MESSAGES
+========================= */
+.msg {
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  font-weight: 500;
+  text-align: center;
+}
+.msg.success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.msg.error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
 /* =========================
    PAGINATION
@@ -208,33 +182,79 @@ h2 {
   align-items: center;
   padding: 20px;
   gap: 20px;
-  background-color: white;
   border-top: 1px solid #f1f5f9;
-}
-
-.page-info {
-  font-weight: 600;
-  color: #64748b;
 }
 
 .btn-page {
   padding: 8px 16px;
   border: 1px solid #d1d5db;
-  background-color: white;
+  background: white;
   border-radius: 8px;
   cursor: pointer;
-  color: #4b5563;
-  transition: all 0.2s;
-  font-weight: 500;
+}
+.btn-page:hover:not(:disabled) { background-color: #f3f4f6; }
+.btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* =========================
+   MODAL / POPUP
+========================= */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-.btn-page:hover:not(:disabled) {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease-out;
 }
 
-.btn-page:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content h3 { color: #1e40af; margin-top: 0; }
+.modal-subtitle { color: #6b7280; margin-bottom: 20px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #374151; font-size: 0.9rem; }
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   background-color: #f9fafb;
 }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.btn-cancel {
+  background: white; border: 1px solid #d1d5db; padding: 10px 20px; border-radius: 8px; cursor: pointer;
+}
+.btn-confirm {
+  background: #1e40af; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;
+}
+.btn-confirm:hover { background: #1e3a8a; }

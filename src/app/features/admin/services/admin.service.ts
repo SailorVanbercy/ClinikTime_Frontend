@@ -6,7 +6,6 @@ export interface AdminUserResult {
   id: number;
   email: string;
   role: string;
-  // nom et prenom sont optionnels, on ne les utilise plus dans le tableau
 }
 
 @Injectable({
@@ -17,17 +16,24 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  // 1. NOUVELLE MÉTHODE : Récupérer tout le monde
+  // 1. Récupérer tout le monde
   getAllUsers(): Observable<AdminUserResult[]> {
     return this.http.get<AdminUserResult[]>(this.apiUrl, { withCredentials: true });
   }
 
+  // 2. Recherche par email
   searchUser(email: string): Observable<AdminUserResult[]> {
     return this.http.get<AdminUserResult>(`${this.apiUrl}/by-email?email=${email}`, { withCredentials: true })
       .pipe(map(user => user ? [user] : []));
   }
 
-  promoteToDoctor(id: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${id}/promote-medecin`, {}, { withCredentials: true });
+  // 3. Promotion avec envoi des données (C'EST ICI LA CORRECTION 👇)
+  promoteToDoctor(id: number, data: any): Observable<any> {
+    // On remplace le {} vide par 'data' qui contient {nom, prenom, telephone, specialiteId}
+    return this.http.post(
+      `${this.apiUrl}/${id}/promote-medecin`,
+      data,
+      { withCredentials: true }
+    );
   }
 }
